@@ -4,9 +4,6 @@ ini_set('display_errors', 'stderr'); // Pro výpis varování na standardní chy
 /******* Hlavní scénář *******/
 check_options();
 
-
-
-
 /********* Funkce *********/
 
 function check_options() {
