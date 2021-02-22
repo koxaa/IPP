@@ -25,6 +25,11 @@ function check_options() {
         }
     
     } elseif (array_key_exists("stats", $options)) {
+
+        if (!$options["stats"]) {
+            fwrite(STDERR,"No file specified for statistic\n");
+            exit(10);
+        }
         // TODO
         echo $options["stats"],"\n";
     }
