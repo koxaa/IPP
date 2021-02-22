@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 ipp21spec.pdf
 Others/parse.php
+Github example/other_parse.php
