@@ -36,13 +36,17 @@ function check_options() {
 }
 
 function print_help_msg() {
-    $path = pathinfo('./');
-
-    echo "Usage: ",$path['filename'],"  ARCHIVE  TESTDIR [TASKNUM]\n";
+    // TODO #1
+    echo "Usage: ",basename(__FILE__)," [--help] [--stats=<filename> [--loc] [--comments] [--labels] [--jumps] ]\n";
     echo "    Skript typu filtr (parse.php v jazyce PHP 7.4)\n";
     echo "      načte ze standardního vstupu zdrojový kód v IPP-code21,\n";
     echo "      zkontroluje lexikální a syntaktickou správnost kódu\n";
     echo "      a vypíše na standardní výstup XML reprezentaci programu.\n";
+    echo "\n";
+    echo "  --loc   vypíše do statistik počet řádků s instrukcemi (nepočítají se\n";
+    echo "          prázdné řádky ani řádky obsahující pouze komentář ani úvodní řádek)\n";
+    echo "  --stats pro sběr skupin statistik.\n";
+
 }
 
 ?>
