@@ -3,7 +3,7 @@ ini_set('display_errors', 'stderr'); // Pro výpis varování na standardní chy
 global $argv;
 /******* Hlavní scénář *******/
 check_options();
-var_dump($argv);
+
 /********* Funkce *********/
 
 function check_options() {
@@ -36,11 +36,13 @@ function check_options() {
 }
 
 function print_help_msg() {
-    echo "Usage: $argv[1]  ARCHIVE  TESTDIR [TASKNUM]";
-    echo "       Skript typu filtr (parse.php v jazyce PHP 7.4)\n";
-    echo "         načte ze standardního vstupu zdrojový kód v IPP-code21,\n";
-    echo "         zkontroluje lexikální a syntaktickou správnost kódu\n";
-    echo "         a vypíše na standardní výstup XML reprezentaci programu.\n";
+    $path = pathinfo('./');
+
+    echo "Usage: ",$path['filename'],"  ARCHIVE  TESTDIR [TASKNUM]\n";
+    echo "    Skript typu filtr (parse.php v jazyce PHP 7.4)\n";
+    echo "      načte ze standardního vstupu zdrojový kód v IPP-code21,\n";
+    echo "      zkontroluje lexikální a syntaktickou správnost kódu\n";
+    echo "      a vypíše na standardní výstup XML reprezentaci programu.\n";
 }
 
 ?>
