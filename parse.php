@@ -1,10 +1,20 @@
 <?php
 ini_set('display_errors', 'stderr'); // Pro výpis varování na standardní chybový výstup
 global $argv;
+
+
 /******* Hlavní scénář *******/
 check_options();
+check_syntax();
+
 
 /********* Funkce *********/
+function check_syntax() {
+
+    $new_line = fgets(STDIN);
+    var_dump($new_line);
+    
+}
 
 function check_options() {
 
