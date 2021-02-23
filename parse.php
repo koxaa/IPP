@@ -35,8 +35,8 @@ function check_options() {
     }
 }
 
-function print_help_msg() {
-    // TODO #1
+function print_help_msg() { //TODO #3
+    
     echo "Usage: ",basename(__FILE__)," [--help] [--stats=<filename> [--loc] [--comments] [--labels] [--jumps] ]\n";
     echo "    Skript typu filtr (parse.php v jazyce PHP 7.4)\n";
     echo "      načte ze standardního vstupu zdrojový kód v IPP-code21,\n";
