@@ -1,9 +1,9 @@
 <?php
 ini_set('display_errors', 'stderr'); // Pro výpis varování na standardní chybový výstup
-
+global $argv;
 /******* Hlavní scénář *******/
 check_options();
-
+var_dump($argv);
 /********* Funkce *********/
 
 function check_options() {
@@ -12,13 +12,16 @@ function check_options() {
     $options = getopt("",["help","stats::"]);
 
     if ($argc == 1) {
+
         return 0;
+
     } elseif (array_key_exists("help", $options)) {
 
         if ($argc != 2) {
             exit(10);
         } else {
-            fwrite(STDOUT,);
+            print_help_msg();
+            exit(0);
         }
     
     } elseif (array_key_exists("stats", $options)) {
@@ -32,9 +35,12 @@ function check_options() {
     }
 }
 
-//"Skript typu filtr (parse.php v jazyce PHP 7.4)\n";
-// načte ze standardního vstupu zdrojový kód v IPP-code21,\n
-// zkontroluje lexikální a syntaktickou správnost kódu\n
-// a vypíše na standardní výstup XML reprezentaci programu.\n"
+function print_help_msg() {
+    echo "Usage: $argv[1]  ARCHIVE  TESTDIR [TASKNUM]";
+    echo "       Skript typu filtr (parse.php v jazyce PHP 7.4)\n";
+    echo "         načte ze standardního vstupu zdrojový kód v IPP-code21,\n";
+    echo "         zkontroluje lexikální a syntaktickou správnost kódu\n";
+    echo "         a vypíše na standardní výstup XML reprezentaci programu.\n";
+}
 
 ?>
