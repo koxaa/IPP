@@ -3,12 +3,24 @@ ini_set('display_errors', 'stderr'); // Pro výpis varování na standardní chy
 global $argv;
 
 
-/******* Hlavní scénář *******/
+/**************************/
+/***** Hlavní scénář ******/
+/**************************/
+
 check_options();
 check_syntax();
 
 
+
+/**************************/
 /********* Funkce *********/
+/**************************/
+
+/**
+ * Checking syntax in line with instuction.
+ *
+ * @return void
+ */
 function check_syntax() {
 
     $new_line = fgets(STDIN);
@@ -16,6 +28,12 @@ function check_syntax() {
     
 }
 
+/**
+ * Checking options.
+ * Desides how script will be running
+ *
+ * @return void
+ */
 function check_options() {
 
     global $argc;
@@ -34,17 +52,19 @@ function check_options() {
             exit(0);
         }
     
-    } elseif (array_key_exists("stats", $options)) {
+    } elseif (array_key_exists("stats", $options)) { // todo #7
 
         if (!$options["stats"]) {
             fwrite(STDERR,"Missing an argument for parament --stats\n");
             exit(10);
         }
-        // TODO
         echo $options["stats"],"\n";
     }
 }
 
+/**
+ * Printing out help message
+ */
 function print_help_msg() { //TODO #3
     
     echo "Usage: ",basename(__FILE__)," [--help] [--stats=<filename> [--loc] [--comments] [--labels] [--jumps] ]\n";
