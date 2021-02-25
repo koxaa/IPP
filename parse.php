@@ -29,9 +29,6 @@ $opCodes = array("move", "createframe","pushframe",
 
 
 check_options();
-scanLine();
-
-
 
 
 /**

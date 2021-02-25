@@ -6,6 +6,7 @@ class line {
 
 	var $elements;
 	var $newElements;
+	static $comments;
 
 	function __construct() {
 		$this->elements = array();
@@ -28,13 +29,20 @@ class line {
 	
 }
 
+
+/**
+ * Gets nem line, normilize it, and returns as array.
+ *
+ * @return string[]|false
+ * array of strings, false if eol
+ */
 function scanLine() {
 
+	$result = false;
 	$line = fgets(STDIN);
-	$result = array("opCode" => false,"op1" => false, "op2" => false, "op3" => false);
 
-	//Check if new line is comment or empty. Jump over this.
-	while(true) {
+	// Test for comment, empty line or EOF
+	while($line != false) {
 
 		// Commented line
 		if ( preg_match("/^\s*#/",$line) ) {
@@ -49,11 +57,15 @@ function scanLine() {
 		}
 	}
 
-	preg_replace("/.*\s\s*/", " ", $line);
-	$exploded = explode(" ",$line); // TODO #8
-	var_dump($line);
-	var_dump($exploded);
-	
+	// line normalizing
+	if ($line != false) {
+		$line = preg_replace("/^\s\s*/", "" , $line);
+		$line = preg_replace("/\s\s*$/", null, $line);
+		$line = preg_replace("/\s\s*/", " ", $line);
+		$result = explode(" ", $line);
+	}
+
+	return $result;
 }
 
 ?>
