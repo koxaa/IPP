@@ -29,6 +29,7 @@ function scanLine() {
 
 	// line normalizing
 	if ($line != false) {
+		$line = preg_replace("/#.*/", PHP_EOL,$line);
 		$line = preg_replace("/^\s\s*/", "" , $line);
 		$line = preg_replace("/\s\s*$/", null, $line);
 		$line = preg_replace("/\s\s*/", " ", $line);
