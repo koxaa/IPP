@@ -15,10 +15,10 @@ const ERROR_OUTPUT_FILE = 12;
 const ERROR_INTERNAL = 99;
 const ERROR_HEADER = 21;
 const ERROR_OPCODE = 22;
-const ERROR_SYNTAX = 23;
-const ERROR_LEX = 23;
+const ERROR_SYNTAX_LEX = 23;
 
-$opCodes = array("move", "createframe","pushframe",
+
+$opCodes = array(1 => "move", "createframe","pushframe",
 "popframe","defvar","call","return",
 "pushs","pops","add","sub","mul",
 "idiv","lt","gt","eq","and", "or",
@@ -29,6 +29,21 @@ $opCodes = array("move", "createframe","pushframe",
 
 
 check_options();
+$line = new lineClass;
+if ($line->elements == false) { // test for empty file
+    exit(ERROR_SYNTAX_LEX);
+} else if ( ($line->cnt() != 1) or (strcmp($line->elements[0], ".IPPcode21") != 0) ) { // test for bad header or its missing
+    exit(ERROR_HEADER);
+}
+
+while (($line->nextLine())) {
+    
+    if (!$line->searcOpCode()) {
+        exit(ERROR_OPCODE);
+    }
+
+}
+    
 
 
 /**

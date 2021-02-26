@@ -1,5 +1,31 @@
 <?php
 
+class lineClass {
+	var $elements;
+	function __construct()
+	{
+		$this->elements = scanLine();
+	}
+
+	function nextLine(){
+		return $this->elements = scanLine();
+	}
+	
+	function cnt(){
+		return count($this->elements);
+	}
+
+	function searcOpCode(){
+		global $opCodes;
+		return array_search( strtolower($this->elements[0]) , $opCodes);
+	}
+	
+	function dump() {
+		var_dump($this->elements);
+	}
+}
+
+
 /**
  * Gets nem line, normilize it, and returns as array.
  *
@@ -39,34 +65,5 @@ function scanLine() {
 	return $result;
 }
 
-/** I would like to try this */
 
-// global $opCodes;
-
-// class line {
-
-// 	var $elements;
-// 	var $newElements;
-// 	static $comments;
-
-// 	function __construct() {
-// 		$this->elements = array();
-// 	}
-
-// 	function add_ellement ($newElements) {
-// 		$this->elements = array_push($this->ellements, $newElements);
-// 	}
-
-// 	function next_line() {
-// 		$line = fgets(STDIN);
-// 		while(true) {
-// 			if ( preg_match("/^\s*#/",$line) ) {
-// 				$line = fgets(STDIN);
-// 			} elseif (preg_match("/^\s*$/",$line)) {
-// 				$line = fgets(STDIN);
-// 			}
-// 		}
-// 	}
-	
-// }
 ?>
