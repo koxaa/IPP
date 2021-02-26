@@ -1,7 +1,16 @@
 <?php
+/**
+ * IPP Project 2020/2021
+ * Parsing code in IPPcode21. Create XML file.
+ * 
+ * @file scanner.php
+ * @brief Implementation of classes and methods for work with lines from input.
+ * @author Kostiantyn Krukhmalov
+*/
+
 
 /**
- * Represents a line
+ * Represents a line.
  * 
  * Line is represented as array of strings
  */
