@@ -1,25 +1,51 @@
 <?php
 
-class lineClass {
+/**
+ * Represents a line
+ * 
+ * Line is represented as array of strings
+ */
+class Line {
+	
 	var $elements;
-	function __construct()
-	{
-		$this->elements = scanLine();
+
+	function __construct(){
+		$this->elements = getLine();
 	}
 
+	/**
+	 * Gets next line.
+	 *
+	 * @return boolean
+	 */
 	function nextLine(){
-		return $this->elements = scanLine();
+		$this->elements = getLine();
+		return ($this->elements != false) ? true : false;
 	}
 	
+	/**
+	 * Returns a count of elements in line.
+	 *
+	 * @return int
+	 */
 	function cnt(){
 		return count($this->elements);
 	}
 
+	/**
+	 * Searchs match with operation code.
+	 * 
+	 * @return int
+	 * index in $opCodes
+	 */
 	function searcOpCode(){
 		global $opCodes;
 		return array_search( strtolower($this->elements[0]) , $opCodes);
 	}
 	
+	/**
+	 * Write out Content of line.
+	 */
 	function dump() {
 		var_dump($this->elements);
 	}
@@ -27,12 +53,12 @@ class lineClass {
 
 
 /**
- * Gets nem line, normilize it, and returns as array.
+ * Gets new line, normilize it, and returns as array.
  *
  * @return string[]|false
  * array of strings, false if eol
  */
-function scanLine() {
+function getLine() {
 
 	$result = false;
 	$line = fgets(STDIN);

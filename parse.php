@@ -28,23 +28,72 @@ $opCodes = array(1 => "move", "createframe","pushframe",
 "jumpifeq","jumpifneq","exit","dprint","break");
 
 
+
+
 check_options();
-$line = new lineClass;
+
+$line = new Line;
 if ($line->elements == false) { // test for empty file
     exit(ERROR_SYNTAX_LEX);
 } else if ( ($line->cnt() != 1) or (strcmp($line->elements[0], ".IPPcode21") != 0) ) { // test for bad header or its missing
     exit(ERROR_HEADER);
 }
 
-while (($line->nextLine())) {
-    
-    if (!$line->searcOpCode()) {
+
+// SYNTAX CHECKING
+while ($line->nextLine()) {
+
+    if ($line->searcOpCode() == false) {
         exit(ERROR_OPCODE);
     }
+    
+    $ints = new Instruction($line);
+
+    switch ($ints->opCode) {
+        case 'move': // TODO
+            checkOpCnt($ints, 2);
+
+            break;
+        
+        default:
+            # code...
+            break;
+    }
+
+
+    unset($ints);
+}
+
+
+
+class Instruction {
+
+    var $opCode;
+    var $operands = array();
+    
+    function __construct(Line $line){
+       $this->opCode = $line->elements[0];
+       for ($i=1; $i < $line->cnt(); $i++) { 
+           array_push($this->operands, $line->elements[$i]);
+       }
+       $this->opCodeToLower();
+    }
+
+    function opCodeToLower() {
+        $this->opCode = strtolower($this->opCode);
+    }
+
+    function operandsCnt() {
+        return count($this->operands);
+    }
+
+
 
 }
-    
 
+function checkOpCnt( Instruction $instruction ,$number) {
+    return ($instruction->operandsCnt() == $number) ? true : exit(ERROR_SYNTAX_LEX);
+}
 
 /**
  * Checking options.
