@@ -17,5 +17,5 @@ $opCodes = array(1 => "move", "createframe","pushframe",
 "setchar","type","label", "jump",
 "jumpifeq","jumpifneq","exit","dprint","break");
 
-$variablePattern = "(LF|GF|TF)@[A-Za-z_\-$&%*!?][A-Za-z_\-$&%*!?]*";
+
 ?>

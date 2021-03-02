@@ -25,14 +25,10 @@ if ($line->elements == false) { // test for empty file
 } else if ( ($line->cnt() != 1) or (strcmp($line->elements[0], ".IPPcode21") != 0) ) { // test for bad header or its missing
     exit(ERROR_HEADER);
 }
-echo "Here is good: 28\n";
+
 $iterations = 1;
 // SYNTAX CHECKING
 while ($line->nextLine()) {
-
-    if ($line->searcOpCode() == false) {
-        exit(ERROR_OPCODE);
-    }
     
     $inst = new Instruction($line);
     var_dump($inst);
@@ -100,12 +96,10 @@ while ($line->nextLine()) {
             break;
 
         default:
-            echo "NO IN SWITCH\n";
             exit(ERROR_OPCODE);
             break;
     }
-    $iterations++;
-    echo $iterations, "\n";
+    
     unset($inst);
 }
 
@@ -151,13 +145,13 @@ class Instruction {
     function checkSymb(int $opnum){
         if ( $this->checkVar($opnum) == true ) {
             return true;
-        } elseif ( preg_match("/^int@-{0,1}[0-9]*$/",$this->operands[$opnum] == 1)) {
+        } elseif ( preg_match("/^int@-{0,1}[0-9]+$/u",$this->operands[$opnum]) == 1) {
             return true;
-        } elseif ( preg_match("/^bool@(true|false)$/",$this->operands[$opnum] == 1)) {
+        } elseif ( preg_match("/^bool@(true|false)$/u",$this->operands[$opnum]) == 1) {
             return true;
-        } elseif ( preg_match("/string@(\\[0-9]{3}|[^#\\\s])*/",$this->operands[$opnum])) {
+        } elseif ( preg_match("/^string@([\p{L}!\"\$-\[\]-~]|\\\d{3}|)*$/um",$this->operands[$opnum]) == 1) {
             return true;
-        } elseif ( preg_match("/^nil@nil$/", $this->operands[$opnum]) == 1) {
+        } elseif ( preg_match("/^nil@nil$/u", $this->operands[$opnum]) == 1) {
             return true;
         } else {
             return false;
@@ -179,20 +173,6 @@ class Instruction {
             return false;
         }
     }
-
-    // function isIntType (int $opnum) {
-    //     if ( preg_match("/int@-{0,1}[0-9]*/",$this->operands[$opnum]) == 1) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
-    // function isBoolType (int $opnum) {
-    //     if ( preg_match("/bool@(true|false)/",$this->operands[$opnum] == 1)) {
-    //         # code...
-    //     }
-    // }
 }
 
 
