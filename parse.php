@@ -10,6 +10,7 @@
 
 include 'parse_lib/scanner.php';
 include 'parse_lib/data.php';
+include 'parse_lib/writer.php';
 ini_set('display_errors', 'stderr'); // Pro výpis varování na standardní chybový výstup
 
 
@@ -26,7 +27,8 @@ if ($line->elements == false) { // test for empty file
     exit(ERROR_HEADER);
 }
 
-$iterations = 1;
+$w = new Writer;
+$w->start();
 // SYNTAX CHECKING
 while ($line->nextLine()) {
     
@@ -99,9 +101,11 @@ while ($line->nextLine()) {
             exit(ERROR_OPCODE);
             break;
     }
-    
+    $w->inst($inst);
     unset($inst);
 }
+$w->finish();
+$w->writeOut();
 
 
 /**
@@ -142,16 +146,24 @@ class Instruction {
         }
     }
 
-    function checkSymb(int $opnum){
-        if ( $this->checkVar($opnum) == true ) {
-            return true;
-        } elseif ( preg_match("/^int@-{0,1}[0-9]+$/u",$this->operands[$opnum]) == 1) {
+    function checkConst (int $opnum) {
+        if ( preg_match("/^int@-{0,1}[0-9]+$/u",$this->operands[$opnum]) == 1) {
             return true;
         } elseif ( preg_match("/^bool@(true|false)$/u",$this->operands[$opnum]) == 1) {
             return true;
-        } elseif ( preg_match("/^string@([\p{L}!\"\$-\[\]-~]|\\\d{3}|)*$/um",$this->operands[$opnum]) == 1) {
+        } elseif ( preg_match("/^string@([\p{L}!\"\$-\[\]-~]|\\\\\d{3})*$/um",$this->operands[$opnum]) == 1) {
             return true;
         } elseif ( preg_match("/^nil@nil$/u", $this->operands[$opnum]) == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function checkSymb(int $opnum){
+        if ( $this->checkVar($opnum) == true ) {
+            return true;
+        } elseif($this->checkConst($opnum)) {
             return true;
         } else {
             return false;
@@ -172,6 +184,10 @@ class Instruction {
         } else {
             return false;
         }
+    }
+
+    function operantType(int $opnum){
+        
     }
 }
 
