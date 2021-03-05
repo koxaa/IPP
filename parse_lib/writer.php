@@ -36,13 +36,19 @@ class Writer extends XMLWriter{
 		$this->text(self::$instNum);
 		$this->endAttribute();
 
+		$this->operands($inst);
+		
+		$this->endElement();
+	}
+
+	function operands(Instruction $inst){
+
 		for ($i=0; $i < count($inst->operands); $i++) { 
 			$this->startElement('arg'.strval($i+1));
 			$this->startAttribute('type');
 			$opType = $inst->operandType($i);
 			$this->text($opType);
 			$this->startElement("text");
-			
 			switch ($opType) {
 				case 'string':
 					$this->text(substr($inst->operands[$i], 7));
@@ -59,13 +65,9 @@ class Writer extends XMLWriter{
 				default:
 					break;
 			}
-
 			$this->endElement();
-
 			$this->endElement();
 		}
-		
-		$this->endElement();
 	}
 
 	function writeOut () {
