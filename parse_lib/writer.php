@@ -68,10 +68,6 @@ class Writer extends XMLWriter{
 		$this->endElement();
 	}
 
-	function operand () {
-
-	}
-
 	function writeOut () {
 		echo $this->outputMemory();
 	}
