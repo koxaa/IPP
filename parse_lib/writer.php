@@ -1,14 +1,17 @@
 <?php
 
+const XML_INDENT = 1;
+const XML_INDENT_STRING = '   ';
+
 class Writer extends XMLWriter{
 	
-	static $instNum = 0;
+	static private $instNum = 0;
 
 	function __construct()
 	{
 		$this->openMemory();
-		$this->setIndent(1);
-		$this->setIndentString(' ');
+		$this->setIndent(XML_INDENT);
+		$this->setIndentString(XML_INDENT_STRING);
 	}
 
 	function start()
@@ -22,7 +25,7 @@ class Writer extends XMLWriter{
 
 	function inst (Instruction $inst) {
 		
-		$this->openElementsCNT++;
+		self::$instNum++;
 		$this->startElement('instruction');
 
 		$this->startAttribute('opcode');
@@ -30,28 +33,38 @@ class Writer extends XMLWriter{
 		$this->endAttribute();
 
 		$this->startAttribute('order');
-		$this->text($this->openElementsCNT);
+		$this->text(self::$instNum);
 		$this->endAttribute();
 
-		// for ($i = 0;$inst->operands[$i]; $i++ ) {
-		// 	$this->startElement('arg' . strval($i + 1));		// zacina od arg1
-		// 	$this->startAttribute('type');
-		// 	if ($inst->checkConst($i)) {
+		for ($i=0; $i < count($inst->operands); $i++) { 
+			$this->startElement('arg'.strval($i+1));
+			$this->startAttribute('type');
+			$opType = $inst->operandType($i);
+			$this->text($opType);
+			$this->startElement("text");
+			
+			switch ($opType) {
+				case 'string':
+					$this->text(substr($inst->operands[$i], 7));
+					break;
+				case 'bool':
+					$this->text(substr($inst->operands[$i], 5));
+					break;
+				case 'int': case 'nil':
+					$this->text(substr($inst->operands[$i], 4));
+					break;
+				case 'label': case 'type': case 'var':
+					$this->text($inst->operands[$i]);
+					break;
+				default:
+					break;
+			}
 
-		// 	} elseif ($inst->checkLabel($i)) {
-		// 		$this->text('lable');
-		// 	} elseif ($inst->checkVar($i)) {
-		// 		$this->text('variable');
-		// 	}else {
-		// 		# code...
-		// 	}
+			$this->endElement();
 
-		// 	$this->endAttribute();
-
-		// 	$this->endElement();
-		// }
+			$this->endElement();
+		}
 		
-
 		$this->endElement();
 	}
 

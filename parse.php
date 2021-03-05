@@ -10,30 +10,32 @@
 
 include 'parse_lib/scanner.php';
 include 'parse_lib/data.php';
+include 'parse_lib/instruction.php';
 include 'parse_lib/writer.php';
-ini_set('display_errors', 'stderr'); // Pro výpis varování na standardní chybový výstup
 
-
-
-/**** Main script ****/
+ini_set('display_errors', 'stderr');
 
 check_options();
 
 $line = new Line;
+$w = new Writer;
+$w->start();
 
-if ($line->elements == false) { // test for empty file
+// test for empty file
+if ($line->elements == false) {
     exit(ERROR_SYNTAX_LEX);
-} else if ( ($line->cnt() != 1) or (strcmp($line->elements[0], ".IPPcode21") != 0) ) { // test for bad header or its missing
+}
+
+// test for bad header or its missing
+if ( ($line->cnt() != 1) or (strcmp($line->elements[0], ".IPPcode21") != 0) ) {
     exit(ERROR_HEADER);
 }
 
-$w = new Writer;
-$w->start();
-// SYNTAX CHECKING
+
+/******* Parsing ********/
 while ($line->nextLine()) {
     
     $inst = new Instruction($line);
-    var_dump($inst);
     switch ($inst->opCode) {
 
         // no operands
@@ -106,90 +108,6 @@ while ($line->nextLine()) {
 }
 $w->finish();
 $w->writeOut();
-
-
-/**
- * Represents a instruction.
- * 
- * Instruction is OPCODE and 
- */
-class Instruction {
-
-    var $opCode;
-    var $operands = array();
-    
-    function __construct(Line $line){
-       $this->opCode = $line->elements[0];
-       for ($i=1; $i < $line->cnt(); $i++) { 
-           array_push($this->operands, $line->elements[$i]);
-       }
-       $this->opCodeToLower();
-    }
-
-    function opCodeToLower() {
-        $this->opCode = strtolower($this->opCode);
-    }
-
-    function operandsCnt() {
-        return count($this->operands);
-    }
-
-    function checkOpCnt($count) {
-        return ($this->operandsCnt() == $count) ? true : false;
-    }
-
-    function checkVar(int $opnum) {
-        if ( preg_match("/^(LF|GF|TF)@[A-Za-z_\-$&%*!?][0-9A-Za-z_\-$&%*!?]*$/", $this->operands[$opnum]) == 1 ) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function checkConst (int $opnum) {
-        if ( preg_match("/^int@-{0,1}[0-9]+$/u",$this->operands[$opnum]) == 1) {
-            return true;
-        } elseif ( preg_match("/^bool@(true|false)$/u",$this->operands[$opnum]) == 1) {
-            return true;
-        } elseif ( preg_match("/^string@([\p{L}!\"\$-\[\]-~]|\\\\\d{3})*$/um",$this->operands[$opnum]) == 1) {
-            return true;
-        } elseif ( preg_match("/^nil@nil$/u", $this->operands[$opnum]) == 1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function checkSymb(int $opnum){
-        if ( $this->checkVar($opnum) == true ) {
-            return true;
-        } elseif($this->checkConst($opnum)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function checkLabel(int $opnum = 0) {
-        if (preg_match("/[A-Za-z_\-$&%*!?][0-9A-Za-z_\-$&%*!?]*/", $this->operands[$opnum]) == 1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function checkType(int $opnum) {
-        if (preg_match("/^(int|string|bool)$/",$this->operands[$opnum])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function operantType(int $opnum){
-        
-    }
-}
 
 
 
