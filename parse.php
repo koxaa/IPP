@@ -34,7 +34,7 @@ if ( ($line->cnt() != 1) or (strcmp($line->elements[0], ".IPPcode21") != 0) ) {
 
 /******* Parsing ********/
 while ($line->nextLine()) {
-    
+    Statistics::loc_inc();
     $inst = new Instruction($line);
     switch ($inst->opCode) {
 
@@ -59,6 +59,9 @@ while ($line->nextLine()) {
         case 'call': case 'label': case 'jump':
             ifFalseExit($inst->checkOpCnt(1), ERROR_SYNTAX_LEX);
             ifFalseExit($inst->checkLabel(),ERROR_SYNTAX_LEX);
+            
+            if ($inst->opCode == 'call' || $inst->opCode == 'jump') Statistics::jumps_inc();
+
             break;
 
         // <var> <symb>
@@ -97,6 +100,7 @@ while ($line->nextLine()) {
             ifFalseExit($inst->checkLabel(), ERROR_SYNTAX_LEX);
             ifFalseExit($inst->checkSymb(1), ERROR_SYNTAX_LEX);
             ifFalseExit($inst->checkSymb(2), ERROR_SYNTAX_LEX);
+            Statistics::jumps_inc();
             break;
 
         default:
@@ -108,7 +112,6 @@ while ($line->nextLine()) {
 }
 $w->finish();
 $w->writeOut();
-
 
 
 /**

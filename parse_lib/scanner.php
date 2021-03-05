@@ -78,6 +78,7 @@ function getLine() {
 		// Commented line
 		if ( preg_match("/^\s*#/",$line) ) {
 			$line = fgets(STDIN);
+			Statistics::comments_inc();
 			continue;
 		// Empty line
 		} elseif (preg_match("/^\s*$/",$line)) {
@@ -87,6 +88,8 @@ function getLine() {
 			break;
 		}
 	}
+
+	if (preg_match("/.*#.*/", $line)) Statistics::comments_inc(); 
 
 	// line normalizing
 	if ($line != false) {

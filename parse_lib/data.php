@@ -18,4 +18,23 @@ $opCodes = array(1 => "move", "createframe","pushframe",
 "jumpifeq","jumpifneq","exit","dprint","break");
 
 
-?>
+class Statistics {
+	
+	static public $comments = 0;
+	static public $loc = 0;
+	static public $jumps = 0;
+
+	static function comments_inc () {
+		self::$comments++;
+	}
+
+	static function loc_inc () {
+		self::$loc++;
+	}
+
+	static function jumps_inc () {
+		self::$jumps++;
+	}
+}
+
+?> 
