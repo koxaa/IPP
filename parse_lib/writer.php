@@ -1,7 +1,7 @@
 <?php
 
 const XML_INDENT = 1;
-const XML_INDENT_STRING = '   ';
+const XML_INDENT_STRING = '    ';
 
 class Writer extends XMLWriter{
 	
@@ -28,12 +28,12 @@ class Writer extends XMLWriter{
 		self::$instNum++;
 		$this->startElement('instruction');
 
-		$this->startAttribute('opcode');
-		$this->text(strtoupper($inst->opCode));
-		$this->endAttribute();
-
 		$this->startAttribute('order');
 		$this->text(self::$instNum);
+		$this->endAttribute();
+
+		$this->startAttribute('opcode');
+		$this->text(strtoupper($inst->opCode));
 		$this->endAttribute();
 
 		$this->operands($inst);
@@ -48,7 +48,8 @@ class Writer extends XMLWriter{
 			$this->startAttribute('type');
 			$opType = $inst->operandType($i);
 			$this->text($opType);
-			$this->startElement("text");
+			$this->endAttribute();
+			//$this->startElement("text");
 			switch ($opType) {
 				case 'string':
 					$this->text(substr($inst->operands[$i], 7));
@@ -65,7 +66,7 @@ class Writer extends XMLWriter{
 				default:
 					break;
 			}
-			$this->endElement();
+			//$this->endElement();
 			$this->endElement();
 		}
 	}
