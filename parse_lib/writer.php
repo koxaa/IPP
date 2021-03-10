@@ -1,21 +1,27 @@
 <?php
+/**
+ * IPP Project 2020/2021
+ * Parsing code in IPPcode21. Represent IPPcode21 in XML
+ * 
+ * @file writer.php
+ * @brief Writer class implementation
+ * @author Kostiantyn Krukhmalov
+*/
 
 const XML_INDENT = 1;
 const XML_INDENT_STRING = '    ';
 
-class Writer extends XMLWriter{
+class Writer extends XMLWriter {
 	
 	static private $instNum = 0;
 
-	function __construct()
-	{
+	function __construct() {
 		$this->openMemory();
 		$this->setIndent(XML_INDENT);
 		$this->setIndentString(XML_INDENT_STRING);
 	}
 
-	function start()
-	{
+	function start() {
 		$this->startDocument('1.0','UTF-8');
 		$this->startElement('program');
 		$this->startAttribute('language');
@@ -24,24 +30,19 @@ class Writer extends XMLWriter{
 	}
 
 	function inst (Instruction $inst) {
-		
 		self::$instNum++;
 		$this->startElement('instruction');
-
 		$this->startAttribute('order');
 		$this->text(self::$instNum);
 		$this->endAttribute();
-
 		$this->startAttribute('opcode');
 		$this->text(strtoupper($inst->opCode));
 		$this->endAttribute();
-
-		$this->operands($inst);
-		
+		$this->operands($inst);		
 		$this->endElement();
 	}
 
-	function operands(Instruction $inst){
+	function operands(Instruction $inst) {
 
 		for ($i=0; $i < count($inst->operands); $i++) { 
 			$this->startElement('arg'.strval($i+1));
@@ -66,7 +67,6 @@ class Writer extends XMLWriter{
 				default:
 					break;
 			}
-			//$this->endElement();
 			$this->endElement();
 		}
 	}

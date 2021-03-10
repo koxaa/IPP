@@ -3,7 +3,7 @@ DEFVAR GF@counter
 MOVE GF@counter string@ # Inicializace proměnné na prázdný řetězec
 # Jednoduchá iterace , dokud nebude splněna zadaná podmínka
 LABEL while
-JUMPIFEQ end GF@counter string@\222
+JUMPIFEQ end GF@counter string@\222        
 WRITE string@Proměnná\032GF@counter\032obsahuje\032
 WRITE GF@counter
 WRITE string@\333

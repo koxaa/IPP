@@ -1,19 +1,13 @@
 <?php
 /**
  * IPP Project 2020/2021
- * Parsing code in IPPcode21. Create XML file.
+ * Parsing code in IPPcode21. Represent IPPcode21 in XML
  * 
  * @file scanner.php
- * @brief Implementation of classes and methods for work with lines from input.
+ * @brief Implementation of classes and methods for work with string from input.
  * @author Kostiantyn Krukhmalov
 */
 
-
-/**
- * Represents a line.
- * 
- * Line is represented as array of strings
- */
 class Line {
 	
 	var $elements;
@@ -22,51 +16,17 @@ class Line {
 		$this->elements = getLine();
 	}
 
-	/**
-	 * Gets next line.
-	 *
-	 * @return boolean
-	 */
 	function nextLine(){
 		$this->elements = getLine();
 		return ($this->elements != false) ? true : false;
 	}
 	
-	/**
-	 * Returns a count of elements in line.
-	 *
-	 * @return int
-	 */
 	function cnt(){
 		return count($this->elements);
-	}
-
-	/**
-	 * Searchs match with operation code.
-	 * 
-	 * @return int
-	 * index in $opCodes
-	 */
-	function searcOpCode(){
-		global $opCodes;
-		return array_search( strtolower($this->elements[0]) , $opCodes);
-	}
-	
-	/**
-	 * Write out Content of line.
-	 */
-	function dump() {
-		var_dump($this->elements);
 	}
 }
 
 
-/**
- * Gets new line, normilize it, and returns as array.
- *
- * @return string[]|false
- * array of strings, false if eol
- */
 function getLine() {
 
 	$result = false;
@@ -78,7 +38,6 @@ function getLine() {
 		// Commented line
 		if ( preg_match("/^\s*#/",$line) ) {
 			$line = fgets(STDIN);
-			Statistics::comments_inc();
 			continue;
 		// Empty line
 		} elseif (preg_match("/^\s*$/",$line)) {
@@ -89,9 +48,7 @@ function getLine() {
 		}
 	}
 
-	if (preg_match("/.*#.*/", $line)) Statistics::comments_inc(); 
-
-	// line normalizing
+	// cut comment,move string to start of line, replace two or more spaces by one, remove spaces in the end of line
 	if ($line != false) {
 		$line = preg_replace("/#.*/", PHP_EOL,$line);
 		$line = preg_replace("/^\s\s*/", "" , $line);

@@ -1,12 +1,20 @@
 <?php
-const ERROR_MISS_PARAM = 10;
+/**
+ * IPP Project 2020/2021
+ * Parsing code in IPPcode21. Represent IPPcode21 in XML
+ * 
+ * @file data.php
+ * @brief Some data and error codes
+ * @author Kostiantyn Krukhmalov
+*/
+
+const ERROR_PARAM = 10;
 const ERROR_INPUT_FILE = 11;
 const ERROR_OUTPUT_FILE = 12;
 const ERROR_INTERNAL = 99;
 const ERROR_HEADER = 21;
 const ERROR_OPCODE = 22;
 const ERROR_SYNTAX_LEX = 23;
-
 
 $opCodes = array(1 => "move", "createframe","pushframe",
 "popframe","defvar","call","return",
@@ -16,25 +24,5 @@ $opCodes = array(1 => "move", "createframe","pushframe",
 "write","concat","strlen","getchar",
 "setchar","type","label", "jump",
 "jumpifeq","jumpifneq","exit","dprint","break");
-
-
-class Statistics {
-	
-	static public $comments = 0;
-	static public $loc = 0;
-	static public $jumps = 0;
-
-	static function comments_inc () {
-		self::$comments++;
-	}
-
-	static function loc_inc () {
-		self::$loc++;
-	}
-
-	static function jumps_inc () {
-		self::$jumps++;
-	}
-}
 
 ?> 
